@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relaxing Backgrounds with Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background-color: #000;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        
+        .background-section {
+            flex: 1;
+            position: relative;
+        }
+        
+        .background-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            overflow: hidden;
+        }
+        
+        .background-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+        
+        .background-slide.active {
+            opacity: 1;
+        }
+        
+        .background-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .playlist-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 300px;
+            height: 100%;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 10;
+            background: transparent;
+        }
+        
+        .song-list {
+            list-style: none;
+            margin-top: 20px;
+        }
+        
+        .song-item {
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(3px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .song-item:hover {
+            background: rgba(0, 0, 0, 0.3);
+            transform: translateX(3px);
+        }
+        
+        .song-item.active {
+            background: rgba(0, 0, 0, 0.2);
+            color: #ddd;
+        }
+        
+        .song-title {
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+        
+        /* Smaller player controls */
+        .player-controls {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 8px;
+            border-radius: 6px;
+            color: white;
+            width: 180px;
+            z-index: 15;
+            backdrop-filter: blur(2px);
+        }
+        
+        .now-playing {
+            margin-bottom: 6px;
+        }
+        
+        .now-playing .title {
+            font-weight: 500;
+            margin-bottom: 2px;
+            font-size: 0.8rem;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 3px;
+            background: #555;
+            border-radius: 1px;
+            margin: 6px 0;
+            cursor: pointer;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: #1e90ff;
+            border-radius: 1px;
+            width: 0%;
+        }
+        
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        
+        .control-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .control-button:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .control-button.play-pause {
+            background: rgba(30, 144, 255, 0.7);
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+        }
+        
+        .control-button.play-pause:hover {
+            background: rgba(30, 144, 255, 0.9);
+        }
+        
+        /* Show all player elements */
+        .now-playing,
+        .progress-container,
+        .control-buttons .control-button {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="background-section">
+            <div class="background-container" id="backgroundContainer"></div>
+            
+            <div class="playlist-overlay">
+                <ul class="song-list" id="songList">
+                    <li class="song-item" data-src="./The Script - The Man Who Can't Be Moved .mp3">
+                        <div class="song-title">The Man Who Can't Be Moved</div>
+                    </li>
+                    <li class="song-item" data-src="./Silent Sanctuary - Kundiman .mp3">
+                        <div class="song-title">Kundiman</div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="player-controls">
+                <div class="now-playing">
+                    <div class="title">The Man Who Can't Be Moved</div>
+                </div>
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="control-buttons">
+                    <button class="control-button" id="prevBtn">⏮</button>
+                    <button class="control-button play-pause" id="playPauseBtn">▶</button>
+                    <button class="control-button" id="nextBtn">⏭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="audioPlayer"></audio>
+    
+    <script>
+        const images = [
+            './550533678_825463470044956_5572012320859731333_n.jpg',
+            './550982178_825463493378287_6380987228833917442_n.jpg',
+            './552768278_825463503378286_8984755503799581168_n.jpg',
+            './553448821_825463293378307_3718654470239698143_n.jpg',
+            './553707615_825463296711640_5584065810710151789_n.jpg',
+            './553809194_825463486711621_5715162443576460996_n.jpg',
+            './553865364_825463513378285_2072330067141300328_n.jpg'
+        ];
+
+        let currentIndex = 0;
+        let backgroundInterval = null;
+        let audioPlayer = document.getElementById('audioPlayer');
+        let playPauseBtn = document.getElementById('playPauseBtn');
+        let progressBar = document.getElementById('progressBar');
+        let progressContainer = document.getElementById('progressContainer');
+        let songItems = document.querySelectorAll('.song-item');
+        let currentSongIndex = 0;
+        let backgroundRotationStarted = false;
+        
+        const backgroundContainer = document.getElementById('backgroundContainer');
+
+        // Create background slides
+        images.forEach((image, index) => {
+            const slide = document.createElement('div');
+            slide.className = 'background-slide';
+            
+            const img = document.createElement('img');
+            img.src = image;
+            img.alt = 'Background image ' + (index + 1);
+            
+            slide.appendChild(img);
+            backgroundContainer.appendChild(slide);
+        });
+
+        const slides = document.querySelectorAll('.background-slide');
+
+        // Show first slide
+        if (slides.length > 0) {
+            slides[0].classList.add('active');
+        }
+
+        // Change background function
+        function changeBackground() {
+            slides[currentIndex].classList.remove('active');
+            currentIndex = (currentIndex + 1) % slides.length;
+            slides[currentIndex].classList.add('active');
+        }
+
+        // Start background rotation
+        function startBackgroundRotation() {
+            if (!backgroundRotationStarted) {
+                backgroundInterval = setInterval(() => {
+                    changeBackground();
+                }, 14000);
+                backgroundRotationStarted = true;
+            }
+        }
+
+        // Load song
+        function loadSong(index) {
+            if (index >= 0 && index < songItems.length) {
+                currentSongIndex = index;
+                const songElement = songItems[index];
+                const songSrc = songElement.getAttribute('data-src');
+                const songTitle = songElement.querySelector('.song-title').textContent;
+                
+                document.querySelector('.now-playing .title').textContent = songTitle;
+                audioPlayer.src = songSrc;
+            }
+        }
+        
+        // Play song
+        function playSong() {
+            // Load song if not loaded
+            if (!audioPlayer.src || audioPlayer.src === window.location.href) {
+                loadSong(currentSongIndex);
+            }
+            
+            // Play audio
+            audioPlayer.play()
+                .then(() => {
+                    playPauseBtn.textContent = '⏸';
+                    startBackgroundRotation();
+                })
+                .catch(e => {
+                    console.error("Failed to play audio:", e);
+                });
+        }
+        
+        // Pause song
+        function pauseSong() {
+            audioPlayer.pause();
+            playPauseBtn.textContent = '▶';
+        }
+        
+        // Play next song automatically when current song ends
+        audioPlayer.addEventListener('ended', () => {
+            // Move to next song, or back to first if at the end
+            const nextIndex = (currentSongIndex + 1) % songItems.length;
+            loadSong(nextIndex);
+            playSong();
+        });
+        
+        // Play/Pause button event
+        playPauseBtn.addEventListener('click', () => {
+            if (audioPlayer.paused || audioPlayer.ended) {
+                playSong();
+            } else {
+                pauseSong();
+            }
+        });
+        
+        // Update progress bar
+        audioPlayer.addEventListener('timeupdate', () => {
+            if (audioPlayer.duration) {
+                const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+            }
+        });
+        
+        // Seek functionality
+        progressContainer.addEventListener('click', (e) => {
+            const width = progressContainer.clientWidth;
+            const clickX = e.offsetX;
+            const duration = audioPlayer.duration;
+            
+            if (duration) {
+                audioPlayer.currentTime = (clickX / width) * duration;
+            }
+        });
+        
+        // Song selection
+        songItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                loadSong(index);
+                playSong();
+            });
+        });
+        
+        // Next button
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            const nextIndex = (currentSongIndex + 1) % songItems.length;
+            loadSong(nextIndex);
+            playSong();
+        });
+        
+        // Previous button
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            const prevIndex = (currentSongIndex - 1 + songItems.length) % songItems.length;
+            loadSong(prevIndex);
+            playSong();
+        });
+        
+        // Preload first song
+        loadSong(0);
+    </script>
+</body>
+</html>
