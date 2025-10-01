@@ -99,7 +99,18 @@
         
         .song-title {
             font-weight: 500; /* Bolder font */
-            font-size: 1.1rem; /* Larger font size */
+            font-size: 0.9rem; /* Smaller, consistent font size */
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .song-title {
+                font-size: 0.9rem; /* Same size on mobile */
+            }
+            
+            .playlist-overlay {
+                width: 250px; /* Slightly narrower on mobile */
+            }
         }
         
         /* Smaller player controls */
