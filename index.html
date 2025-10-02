@@ -79,7 +79,7 @@
         /* Quote styling */
         .quote {
             color: #ffffff;
-            font-size: 1.4rem; /* Increased from 1.2rem to 1.4rem */
+            font-size: 1.4rem;
             text-align: center;
             margin: 20px 5px;
             padding: 20px;
@@ -89,15 +89,19 @@
             line-height: 1.5;
             backdrop-filter: blur(2px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            min-height: 80px;
-            width: 300px;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
-            display: block;
+            /* Make container fit text content on one line */
+            width: fit-content;
+            min-width: auto;
+            max-width: none;
+            height: auto;
+            min-height: auto;
+            /* Keep text on one line */
+            white-space: nowrap;
             overflow: visible;
             text-overflow: clip;
-            white-space: nowrap;
+            /* Center the container */
+            margin-left: auto;
+            margin-right: auto;
         }
         
         /* Dropdown tabs */
