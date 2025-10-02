@@ -20,12 +20,16 @@
             display: flex;
             height: 100vh;
             position: relative;
+            /* Ensure dropdowns can overflow */
+            overflow: visible;
         }
 
         
         .background-section {
             flex: 1;
             position: relative;
+            /* Ensure dropdowns can overflow */
+            overflow: visible;
         }
         
         .background-container {
@@ -62,116 +66,247 @@
             position: absolute;
             top: 0;
             left: 0;
-            width: 300px;
+            width: 240px; /* Increased to accommodate wider tabs */
             height: 100%;
-            padding: 20px;
-            overflow-y: auto;
+            padding: 15px;
+            overflow-y: hidden;
             z-index: 10;
             background: transparent;
+            overflow-x: visible;
+            overflow: visible;
         }
         
-        .song-list {
-            list-style: none;
-            margin-top: 20px;
+        /* Quote styling */
+        .quote {
+            color: #ffffff;
+            font-size: 1.4rem; /* Increased from 1.2rem to 1.4rem */
+            text-align: center;
+            margin: 20px 5px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-style: italic;
+            line-height: 1.5;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 80px;
+            width: 300px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            overflow: visible;
+            text-overflow: clip;
+            white-space: nowrap;
         }
         
-        .song-item {
-            padding: 12px 15px; /* Increased padding */
-            margin-bottom: 10px; /* Increased margin */
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 5px; /* Increased radius */
-            color: #fff; /* Brighter text */
+        /* Dropdown tabs */
+        .dropdown-tabs {
+            display: flex;
+            flex-direction: column;
+            margin-top: 5px;
+            position: relative;
+            z-index: 20;
+            /* Ensure dropdowns can overflow to the right */
+            overflow: visible;
+        }
+        
+        .tab {
+            position: relative;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            padding: 12px 20px; /* Increased padding */
+            margin: 5px 0; /* Increased margin */
             cursor: pointer;
+            border-radius: 5px;
             transition: all 0.3s ease;
             backdrop-filter: blur(3px);
             border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem; /* Slightly larger font */
+            text-align: center;
+            z-index: 25;
+            overflow: visible;
+            /* Make tabs wider */
+            width: 220px; /* Increased from default */
+            min-height: 40px; /* Set minimum height */
         }
         
-        .song-item:hover {
-            background: rgba(0, 0, 0, 0.3);
-            transform: translateX(5px); /* Increased movement */
+        .tab:hover {
+            background: rgba(0, 0, 0, 0.5);
         }
         
-        .song-item.active {
-            background: rgba(0, 0, 0, 0.2);
-            color: #fff;
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 100%;
+            background: rgba(0, 0, 0, 0.3); /* More transparent background */
+            min-width: 180px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Lighter shadow */
+            border-radius: 5px;
+            z-index: 1000;
+            backdrop-filter: blur(2px); /* Lighter blur effect */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* More visible border */
+            margin-left: 8px;
+            padding: 8px;
+            transform: translateZ(0);
+            right: auto;
+            bottom: auto;
+            visibility: visible;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
         
-        .song-title {
-            font-weight: 500; /* Bolder font */
-            font-size: 0.9rem; /* Smaller, consistent font size */
+        /* Show dropdown content on tab hover with animation */
+        .tab:hover .dropdown-content {
+            display: block;
+            visibility: visible;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .dropdown-content .song-item {
+            margin: 4px 0;
+            padding: 6px 10px;
+            background: rgba(0, 0, 0, 0.1); /* More transparent background */
+            border-radius: 3px;
+            list-style: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(1px); /* Lighter blur effect */
+            border: 1px solid rgba(255, 255, 255, 0.3); /* More visible border */
+            font-size: 0.8rem;
+            text-align: center;
+        }
+        
+        .dropdown-content .song-item:hover {
+            background: rgba(0, 0, 0, 0.3); /* Slightly darker on hover */
+            transform: translateY(-1px);
+        }
+        
+        .dropdown-content .song-title {
+            font-size: 0.8rem;
+            color: white;
+            transition: all 0.3s ease;
+            /* Make the text more transparent */
+            opacity: 0.9;
+        }
+        
+        .dropdown-content .show-lyrics-btn {
+            padding: 1px 4px;
+            font-size: 7px;
         }
         
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .song-title {
-                font-size: 0.9rem; /* Same size on mobile */
+                font-size: 0.9rem;
             }
             
             .playlist-overlay {
-                width: 250px; /* Slightly narrower on mobile */
+                width: 150px;
+                overflow-y: hidden;
+            }
+            
+            .centered-lyrics {
+                width: 75%; /* Reduced from 85% - approximately 1 inch smaller on each side */
+                height: 90%; /* Increased height for mobile */
+                padding: 15px 20px;
+                border-radius: 10px;
+            }
+            
+            .centered-lyrics h3 {
+                font-size: 1.1rem;
+                margin-bottom: 12px;
+            }
+            
+            .centered-lyrics-content {
+                font-size: 13px;
+                line-height: 1.5;
+                padding: 8px;
+                height: calc(100% - 60px); /* Adjusted for mobile */
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE and Edge */
+            }
+            
+            .centered-lyrics-content::-webkit-scrollbar {
+                display: none; /* Chrome, Safari, Opera */
+            }
+            
+            .close-lyrics {
+                width: 18px;
+                height: 18px;
+                font-size: 10px;
+                top: 8px;
+                right: 8px;
             }
         }
         
-        /* Smaller player controls */
+        /* Bottom middle player controls */
         .player-controls {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.5);
-            padding: 8px;
+            padding: 10px 15px;
             border-radius: 6px;
             color: white;
-            width: 180px;
+            width: 300px;
             z-index: 15;
             backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
         
         .now-playing {
-            margin-bottom: 6px;
+            margin-bottom: 8px;
+            text-align: center;
         }
         
         .now-playing .title {
             font-weight: 500;
-            margin-bottom: 2px;
-            font-size: 0.8rem;
+            margin-bottom: 3px;
+            font-size: 0.9rem;
         }
         
         .progress-container {
             width: 100%;
-            height: 3px;
+            height: 4px;
             background: #555;
-            border-radius: 1px;
-            margin: 6px 0;
+            border-radius: 2px;
+            margin: 8px 0;
             cursor: pointer;
         }
         
         .progress-bar {
             height: 100%;
             background: #1e90ff;
-            border-radius: 1px;
+            border-radius: 2px;
             width: 0%;
         }
         
         .control-buttons {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 6px;
+            gap: 15px;
+            margin-top: 8px;
         }
         
         .control-button {
             background: none;
             border: none;
             color: white;
-            font-size: 0.9rem;
+            font-size: 1rem;
             cursor: pointer;
-            width: 25px;
-            height: 25px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
         }
         
         .control-button:hover {
@@ -180,13 +315,43 @@
         
         .control-button.play-pause {
             background: rgba(30, 144, 255, 0.7);
-            width: 30px;
-            height: 30px;
-            font-size: 1rem;
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
         }
         
         .control-button.play-pause:hover {
             background: rgba(30, 144, 255, 0.9);
+        }
+        
+        /* Volume control */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 15px;
+        }
+        
+        .volume-icon {
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: #555;
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .volume-level {
+            height: 100%;
+            background: #1e90ff;
+            border-radius: 2px;
+            width: 100%; /* Default to full volume */
         }
         
         /* Show all player elements */
@@ -203,27 +368,66 @@
             <div class="background-container" id="backgroundContainer"></div>
             
             <div class="playlist-overlay">
-                <ul class="song-list" id="songList">
-                    <li class="song-item" data-src="./The Script - The Man Who Can't Be Moved .mp3">
-                        <div class="song-title">The Man Who Can't Be Moved</div>
-                    </li>
-                    <li class="song-item" data-src="./Silent Sanctuary - Kundiman .mp3">
-                        <div class="song-title">Kundiman</div>
-                    </li>
-                </ul>
+                <!-- Quote at the top -->
+                <div class="quote">
+                    Let your thoughts go. Why focus on something you can't control?
+                </div>
+                
+                <!-- Dropdown tabs arranged vertically -->
+                <div class="dropdown-tabs">
+                    <div class="tab" id="collection-tab">
+                        Collection
+                        <div class="dropdown-content">
+                            <div class="song-item" data-src="./The Script - The Man Who Can't Be Moved .mp3">
+                                <div class="song-title">The Man Who Can't Be Moved</div>
+                            </div>
+                            <div class="song-item" data-src="./Silent Sanctuary - Kundiman .mp3">
+                                <div class="song-title">Kundiman</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab" id="classic-tab">
+                        Classic
+                        <div class="dropdown-content">
+                            <div class="song-item" data-src="./DEF LEPPARD - When Love & Hate Collide.mp3">
+                                <div class="song-title">When Love & Hate Collide</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab" id="favorite-tab">
+                        Favorite
+                        <div class="dropdown-content">
+                            <div class="song-item" data-src="./LANY - Thru these tears.mp3">
+                                <div class="song-title">Thru these tears</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Removed the main song list as requested -->
             </div>
             
-            <div class="player-controls">
-                <div class="now-playing">
-                    <div class="title">The Man Who Can't Be Moved</div>
-                </div>
-                <div class="progress-container" id="progressContainer">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-button" id="prevBtn">⏮</button>
-                    <button class="control-button play-pause" id="playPauseBtn">▶</button>
-                    <button class="control-button" id="nextBtn">⏭</button>
+            <!-- Removed the lyrics display section -->
+        </div>
+    </div>
+    
+    <!-- Player controls moved to bottom middle -->
+    <div class="player-controls">
+        <div class="now-playing">
+            <div class="title" id="nowPlayingTitle">The Man Who Can't Be Moved</div>
+        </div>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="control-buttons">
+            <button class="control-button" id="prevBtn">⏮</button>
+            <button class="control-button play-pause" id="playPauseBtn">▶</button>
+            <button class="control-button" id="nextBtn">⏭</button>
+            <!-- Volume control -->
+            <div class="volume-control">
+                <div class="volume-icon" id="volumeIcon">🔊</div>
+                <div class="volume-slider" id="volumeSlider">
+                    <div class="volume-level" id="volumeLevel"></div>
                 </div>
             </div>
         </div>
@@ -243,6 +447,8 @@
             './554367891_825463463378290_7292960422818193697_n.jpg'
         ];
 
+        // Complete lyrics data - removed as requested
+        
         let currentIndex = 0;
         let backgroundInterval = null;
         let audioPlayer = document.getElementById('audioPlayer');
@@ -254,6 +460,7 @@
         let backgroundRotationStarted = false;
         
         const backgroundContainer = document.getElementById('backgroundContainer');
+        const nowPlayingTitle = document.getElementById('nowPlayingTitle');
 
         // Create background slides
         images.forEach((image, index) => {
@@ -295,12 +502,19 @@
         // Load song
         function loadSong(index) {
             if (index >= 0 && index < songItems.length) {
+                // Remove active class from all songs
+                songItems.forEach(item => item.classList.remove('active'));
+                
                 currentSongIndex = index;
                 const songElement = songItems[index];
                 const songSrc = songElement.getAttribute('data-src');
                 const songTitle = songElement.querySelector('.song-title').textContent;
                 
-                document.querySelector('.now-playing .title').textContent = songTitle;
+                // Add active class to current song
+                songElement.classList.add('active');
+                
+                // Update now playing title
+                nowPlayingTitle.textContent = songTitle;
                 audioPlayer.src = songSrc;
             }
         }
@@ -331,10 +545,14 @@
         
         // Play next song automatically when current song ends
         audioPlayer.addEventListener('ended', () => {
-            // Move to next song, or back to first if at the end
-            const nextIndex = (currentSongIndex + 1) % songItems.length;
-            loadSong(nextIndex);
-            playSong();
+            // Play next song within the current playlist
+            if (currentPlaylist.length > 0) {
+                currentPlaylistIndex = (currentPlaylistIndex + 1) % currentPlaylist.length;
+                const song = currentPlaylist[currentPlaylistIndex];
+                audioPlayer.src = song.src;
+                nowPlayingTitle.textContent = song.title;
+                playSong();
+            }
         });
         
         // Play/Pause button event
@@ -365,30 +583,194 @@
             }
         });
         
-        // Song selection
-        songItems.forEach((item, index) => {
-            item.addEventListener('click', () => {
-                loadSong(index);
+        // Song selection from dropdown items
+        document.querySelectorAll('.dropdown-content .song-item').forEach((item) => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Get the song source and title
+                const songSrc = this.getAttribute('data-src');
+                const songTitle = this.querySelector('.song-title').textContent;
+                
+                // Update now playing title
+                nowPlayingTitle.textContent = songTitle;
+                
+                // Set the audio source
+                audioPlayer.src = songSrc;
+                
+                // Play the song
                 playSong();
+                
+                // Update the current playlist index to match the selected song
+                const songPath = songSrc;
+                // Search in all playlists to find which one contains this song
+                let found = false;
+                for (const [playlistName, playlist] of Object.entries(playlists)) {
+                    for (let i = 0; i < playlist.length; i++) {
+                        if (playlist[i].src === songPath) {
+                            currentPlaylist = playlist;
+                            currentPlaylistIndex = i;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
             });
         });
         
-        // Next button
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            const nextIndex = (currentSongIndex + 1) % songItems.length;
-            loadSong(nextIndex);
-            playSong();
+        // Add JavaScript-based hover functionality for dropdowns
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('mouseenter', function() {
+                const dropdown = this.querySelector('.dropdown-content');
+                if (dropdown) {
+                    dropdown.style.display = 'block';
+                }
+            });
+            
+            tab.addEventListener('mouseleave', function() {
+                const dropdown = this.querySelector('.dropdown-content');
+                if (dropdown) {
+                    dropdown.style.display = 'none';
+                }
+            });
         });
         
-        // Previous button
+        // Set up playlists for each tab (for next/previous buttons)
+        const playlists = {
+            collection: [
+                {src: './The Script - The Man Who Can\'t Be Moved .mp3', title: 'The Man Who Can\'t Be Moved'},
+                {src: './Silent Sanctuary - Kundiman .mp3', title: 'Kundiman'}
+            ],
+            classic: [
+                {src: './DEF LEPPARD - When Love & Hate Collide.mp3', title: 'When Love & Hate Collide'}
+            ],
+            favorite: [
+                {src: './LANY - Thru these tears.mp3', title: 'Thru these tears'}
+            ]
+        };
+        
+        // Current playlist tracking
+        let currentPlaylist = playlists.collection;
+        let currentPlaylistIndex = 0;
+        
+        // Update playlist when tabs are clicked (but don't interfere with dropdown items)
+        document.getElementById('collection-tab').addEventListener('click', function(e) {
+            // Check if the dropdown content was clicked, if so, don't change the playlist
+            if (!e.target.closest('.dropdown-content')) {
+                currentPlaylist = playlists.collection;
+                currentPlaylistIndex = 0;
+                // Play the first song in the collection playlist
+                if (currentPlaylist.length > 0) {
+                    const song = currentPlaylist[currentPlaylistIndex];
+                    audioPlayer.src = song.src;
+                    nowPlayingTitle.textContent = song.title;
+                    playSong();
+                }
+            }
+        });
+        
+        document.getElementById('classic-tab').addEventListener('click', function(e) {
+            // Check if the dropdown content was clicked, if so, don't change the playlist
+            if (!e.target.closest('.dropdown-content')) {
+                currentPlaylist = playlists.classic;
+                currentPlaylistIndex = 0;
+                // Play the first song in the classic playlist
+                if (currentPlaylist.length > 0) {
+                    const song = currentPlaylist[currentPlaylistIndex];
+                    audioPlayer.src = song.src;
+                    nowPlayingTitle.textContent = song.title;
+                    playSong();
+                }
+            }
+        });
+        
+        document.getElementById('favorite-tab').addEventListener('click', function(e) {
+            // Check if the dropdown content was clicked, if so, don't change the playlist
+            if (!e.target.closest('.dropdown-content')) {
+                currentPlaylist = playlists.favorite;
+                currentPlaylistIndex = 0;
+                // Play the first song in the favorite playlist
+                if (currentPlaylist.length > 0) {
+                    const song = currentPlaylist[currentPlaylistIndex];
+                    audioPlayer.src = song.src;
+                    nowPlayingTitle.textContent = song.title;
+                    playSong();
+                }
+            }
+        });
+        
+        // Next button functionality
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (currentPlaylist.length > 0) {
+                currentPlaylistIndex = (currentPlaylistIndex + 1) % currentPlaylist.length;
+                const song = currentPlaylist[currentPlaylistIndex];
+                audioPlayer.src = song.src;
+                nowPlayingTitle.textContent = song.title;
+                playSong();
+            }
+        });
+        
+        // Previous button functionality
         document.getElementById('prevBtn').addEventListener('click', () => {
-            const prevIndex = (currentSongIndex - 1 + songItems.length) % songItems.length;
-            loadSong(prevIndex);
-            playSong();
+            if (currentPlaylist.length > 0) {
+                currentPlaylistIndex = (currentPlaylistIndex - 1 + currentPlaylist.length) % currentPlaylist.length;
+                const song = currentPlaylist[currentPlaylistIndex];
+                audioPlayer.src = song.src;
+                nowPlayingTitle.textContent = song.title;
+                playSong();
+            }
         });
         
         // Preload first song
         loadSong(0);
+        
+        // Volume control functionality - Fixed
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeLevel = document.getElementById('volumeLevel');
+        const volumeIcon = document.getElementById('volumeIcon');
+        
+        // Set initial volume
+        audioPlayer.volume = 1.0;
+        updateVolumeDisplay();
+        
+        // Update volume display
+        function updateVolumeDisplay() {
+            const volumePercentage = audioPlayer.volume * 100;
+            volumeLevel.style.width = volumePercentage + '%';
+            
+            // Update icon based on volume level
+            if (audioPlayer.volume === 0) {
+                volumeIcon.textContent = '🔇';
+            } else if (audioPlayer.volume < 0.5) {
+                volumeIcon.textContent = '🔈';
+            } else {
+                volumeIcon.textContent = '🔊';
+            }
+        }
+        
+        // Volume slider click event - Fixed with proper event handling
+        volumeSlider.addEventListener('click', (e) => {
+            const rect = volumeSlider.getBoundingClientRect();
+            const percent = (e.clientX - rect.left) / rect.width;
+            const newVolume = Math.max(0, Math.min(1, percent));
+            
+            audioPlayer.volume = newVolume;
+            updateVolumeDisplay();
+        });
+        
+        // Volume icon mute/unmute toggle - Fixed
+        volumeIcon.addEventListener('click', () => {
+            if (audioPlayer.volume > 0) {
+                // Store current volume before muting
+                volumeIcon.dataset.previousVolume = audioPlayer.volume;
+                audioPlayer.volume = 0;
+            } else {
+                // Restore previous volume or set to 100% if no previous volume
+                const previousVolume = volumeIcon.dataset.previousVolume || 1.0;
+                audioPlayer.volume = parseFloat(previousVolume);
+            }
+            updateVolumeDisplay();
+        });
     </script>
 </body>
 </html>
